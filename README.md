@@ -1,58 +1,140 @@
-# antenna-tracker-mechanics
-##  Antenna tracker mechanics with stepper motors made specifically for Open.HD project
+<img src="Ghidra/Features/Base/src/main/resources/images/GHIDRA_3.png" width="400">
 
-![Image](photos/tracker.png)
-![Image](photos/IMG_0265.JPG)
+# Ghidra Software Reverse Engineering Framework
+
+Ghidra is a software reverse engineering (SRE) framework created and maintained by the 
+[National Security Agency][nsa] Research Directorate. This framework includes a suite of 
+full-featured, high-end software analysis tools that enable users to analyze compiled code on a 
+variety of platforms including Windows, macOS, and Linux. Capabilities include disassembly, 
+assembly, decompilation, graphing, and scripting, along with hundreds of other features. Ghidra 
+supports a wide variety of processor instruction sets and executable formats and can be run in both 
+user-interactive and automated modes. Users may also develop their own Ghidra extension components 
+and/or scripts using Java or Python.
+
+In support of NSA's Cybersecurity mission, Ghidra was built to solve scaling and teaming problems 
+on complex SRE efforts, and to provide a customizable and extensible SRE research platform. NSA has 
+applied Ghidra SRE capabilities to a variety of problems that involve analyzing malicious code and 
+generating deep insights for SRE analysts who seek a better understanding of potential 
+vulnerabilities in networks and systems.
+
+If you are a U.S. citizen interested in projects like this, to develop Ghidra and other 
+cybersecurity tools for NSA to help protect our nation and its allies, consider applying for a 
+[career with us][career].
+
+## Security Warning
+
+**WARNING:** There are known security vulnerabilities within certain versions of Ghidra.  Before 
+proceeding, please read through Ghidra's [Security Advisories][security] for a better understanding 
+of how you might be impacted.
+
+## Install
+To install an official pre-built multi-platform Ghidra release:  
+* Install [JDK 21 64-bit][jdk]
+* Download a Ghidra [release file][releases]
+  - **NOTE:** The official multi-platform release file is named 
+    `ghidra_<version>_<release>_<date>.zip` which can be found under the "Assets" drop-down.
+    Downloading either of the files named "Source Code" is not correct for this step.
+* Extract the Ghidra release file
+* Launch Ghidra: `./ghidraRun` (or `ghidraRun.bat` for Windows)
+
+For additional information and troubleshooting tips about installing and running a Ghidra release, 
+please refer to `docs/InstallationGuide.html` which can be found in your extracted Ghidra release 
+directory. 
+
+## Build
+
+To create the latest development build for your platform from this source repository:
+
+##### Install build tools:
+* [JDK 21 64-bit][jdk]
+* [Gradle 8.5+][gradle] (or provided Gradle wrapper if Internet connection is available)
+* [Python3][python3] (version 3.9 to 3.12) with bundled pip
+* make, gcc, and g++ (Linux/macOS-only)
+* [Microsoft Visual Studio][vs] 2017+ or [Microsoft C++ Build Tools][vcbuildtools] with the
+  following components installed (Windows-only):
+  - MSVC
+  - Windows SDK
+  - C++ ATL
+
+##### Download and extract the source:
+[Download from GitHub][master]
+```
+unzip ghidra-master
+cd ghidra-master
+```
+**NOTE:** Instead of downloading the compressed source, you may instead want to clone the GitHub 
+repository: `git clone https://github.com/NationalSecurityAgency/ghidra.git`
+
+##### Download additional build dependencies into source repository:
+**NOTE:** If an Internet connection is available and you did not install Gradle, the following 
+`gradle` commands may be replaced with `./gradle(.bat)`.
+```
+gradle -I gradle/support/fetchDependencies.gradle
+```
+
+##### Create development build: 
+```
+gradle buildGhidra
+```
+The compressed development build will be located at `build/dist/`.
+
+For more detailed information on building Ghidra, please read the [Developer Guide][devguide].
+
+For issues building, please check the [Known Issues][known-issues] section for possible solutions.
+
+## Develop
+
+### User Scripts and Extensions
+Ghidra installations support users writing custom scripts and extensions via the *GhidraDev* plugin 
+for Eclipse.  The plugin and its corresponding instructions can be found within a Ghidra release at
+`Extensions/Eclipse/GhidraDev/` or at [this link][ghidradev].
+
+**NOTE:** The *GhidraDev* plugin for Eclipse only supports developing against fully built
+Ghidra installations which can be downloaded from the [Releases][releases] page.
+
+### Advanced Development
+To develop the Ghidra tool itself, it is highly recommended to use Eclipse, which the Ghidra 
+development process has been highly customized for.
+
+##### Install build and development tools:
+* Follow the above [build instructions](#build) so the build completes without errors
+* Install [Eclipse IDE for Java Developers][eclipse]
+
+##### Prepare the development environment:
+``` 
+gradle prepdev eclipse buildNatives
+```
+
+##### Import Ghidra projects into Eclipse:
+* *File* -> *Import...*
+* *General* | *Existing Projects into Workspace*
+* Select root directory to be your downloaded or cloned ghidra source repository
+* Check *Search for nested projects*
+* Click *Finish*
+
+When Eclipse finishes building the projects, Ghidra can be launched and debugged with the provided
+**Ghidra** Eclipse *run configuration*.
+
+For more detailed information on developing Ghidra, please read the [Developer Guide][devguide]. 
+
+## Contribute
+If you would like to contribute bug fixes, improvements, and new features back to Ghidra, please 
+take a look at our [Contributor Guide][contrib] to see how you can participate in this open 
+source project.
 
 
-This is supposed to be ultimate antenna tracker for heavy antennas superior to any existing and future RC-servo based design.
-
-Stepper motors do not jitter / oscillate when subjected to static torque. This is common problem for RC-servo based trackers especially on TILT axis. This tracker will hold position without any movement. With proper control software, movement can be really smooth.
-
-Tracker is designed with a slip ring on PAN axis. This allows non-rotating control electronics and indefinite rotation of PAN axis. 
-For Open.HD use, USB shall be routed through slipring from Ground Pi housed in lower static part to upper rotating part. TILT Stepper motor is also powered trough slipring.
-
-
-##  Done
-* Tilt Axis Assembly
-* Movement tests with control board for 3D printers
-
-##  Work in progress but tested
-* Pan Axis Assembly
-
-##  Work in progress but untested
-* Tripod mounting assembly
-* Lower part for housing electronics (this will probably change several times)
-
-##  Future
-* Software / Firmware support
-
-##  Components
-* 3D printed parts, easy
-* 8mm hollow tube. Hope USA users can get this. Very common in hardware stores in Europe. Needs to be cut to length with hack saw
-* M3 screw rod cut to correct length
-* M3 nuts
-* Various wood screws
-* 4x 608 Bearing
-* 4x M3 60mm metal stand-offs 
-* 1x 1/4-20 UNC nut for tripod mount (This is little complicated in Europe. www.tme.eu sells them. Or you can salvage one from old camera)
-* 1x Strong 46mm x 60mm x 1.6mm plate for tripod mount. Can be old PCB, Aluminum, FR4, G10, CF etc... Needs to be hand cut and drilled unless you have CNC 
-
-
-
-##  FAQ
-### Q: Can I build one?
-A: Sure you can! Download .step file take a look. It is not finished and things may change. 
-### Q: Where are the .stl files?
-A: There will be none until project is finished. Right now, you will need some CAD knowledge
-### Q: I can’t source component X. What can I do?
-A: Download .step file and make necessary changes in your favorite CAD software (something like Fusion 360)
-### Q: Is there ready firmware solution to work with this?
-A: No. For tests I use old RAMPS board with Marlin firmware inside. It can accept G code and make the tracker moving. Config.h for marlin is available for download
-### Q: How can I contribute?
-A1: Probably by pull request via github with modified .step file. I will download one and take a look and merge changes.
-A2: Code support for this. There are nice antenna tracker firmware projects around but none has support for stepper drivers. Most notorious are probably Ghettostaion, u360gts, zs6buj tracker, Ardutracker and so on. Pick one
-### Q: Licence?
-A: GNU GPL v2.0
-
-(c) Miroslav Kolinsky 2020 https://www.kolins.cz
+[nsa]: https://www.nsa.gov
+[contrib]: CONTRIBUTING.md
+[devguide]: DevGuide.md
+[known-issues]: DevGuide.md#known-issues
+[career]: https://www.intelligencecareers.gov/nsa
+[releases]: https://github.com/NationalSecurityAgency/ghidra/releases
+[jdk]: https://adoptium.net/temurin/releases
+[gradle]: https://gradle.org/releases/
+[python3]: https://www.python.org/downloads/
+[vs]: https://visualstudio.microsoft.com/vs/community/
+[vcbuildtools]: https://visualstudio.microsoft.com/visual-cpp-build-tools/
+[eclipse]: https://www.eclipse.org/downloads/packages/
+[master]: https://github.com/NationalSecurityAgency/ghidra/archive/refs/heads/master.zip
+[security]: https://github.com/NationalSecurityAgency/ghidra/security/advisories
+[ghidradev]: GhidraBuild/EclipsePlugins/GhidraDev/GhidraDevPlugin/README.md
